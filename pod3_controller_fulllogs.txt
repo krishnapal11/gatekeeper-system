@@ -1,0 +1,123 @@
+2025/05/18 06:42:01 maxprocs: Leaving GOMAXPROCS=2: CPU quota undefined
+{"level":"info","ts":1747550521.7678952,"logger":"setup","msg":"setting up manager","user agent":"gatekeeper/v3.19.1 (linux/amd64) e80df6cb3e9c829d1d513ff98c483bd724b2898e/2025-04-25T20:15:58Z, opa/v1.3.0, frameworks/v0.0.0-20250328190153-08aa5ffa6033"}
+{"level":"info","ts":1747550521.768601,"logger":"setup","msg":"setting up cert rotation"}
+{"level":"info","ts":1747550521.769712,"logger":"setup","msg":"starting manager"}
+{"level":"info","ts":1747550521.7700496,"msg":"starting server","name":"health probe","addr":"[::]:9090"}
+{"level":"info","ts":1747550521.7734482,"msg":"Starting EventSource","controller":"cert-rotator","source":"kind source: *unstructured.Unstructured"}
+{"level":"info","ts":1747550521.774047,"logger":"cert-rotation","msg":"starting cert rotator controller"}
+{"level":"info","ts":1747550521.7750175,"msg":"Starting EventSource","controller":"cert-rotator","source":"kind source: *v1.Secret"}
+{"level":"info","ts":1747550521.7753303,"msg":"Starting EventSource","controller":"cert-rotator","source":"kind source: *unstructured.Unstructured"}
+{"level":"info","ts":1747550521.8400393,"logger":"readiness-tracker","msg":"ExpectationsDone","gvk":"mutations.gatekeeper.sh/v1, Kind=Assign","expectationCount":0}
+{"level":"info","ts":1747550521.8402615,"logger":"readiness-tracker","msg":"ExpectationsDone","gvk":"externaldata.gatekeeper.sh/v1beta1, Kind=Provider","expectationCount":0}
+{"level":"info","ts":1747550521.8404133,"logger":"readiness-tracker","msg":"ExpectationsDone","gvk":"mutations.gatekeeper.sh/v1alpha1, Kind=AssignImage","expectationCount":0}
+{"level":"info","ts":1747550521.8578522,"logger":"readiness-tracker","msg":"ExpectationsDone","gvk":"mutations.gatekeeper.sh/v1, Kind=AssignMetadata","expectationCount":0}
+{"level":"info","ts":1747550521.8584077,"logger":"readiness-tracker","msg":"ExpectationsDone","gvk":"expansion.gatekeeper.sh/v1alpha1, Kind=ExpansionTemplate","expectationCount":0}
+{"level":"info","ts":1747550521.859066,"logger":"readiness-tracker","msg":"config resource not found - skipping for readiness"}
+{"level":"info","ts":1747550521.8596714,"logger":"readiness-tracker","msg":"ExpectationsDone","gvk":"mutations.gatekeeper.sh/v1, Kind=ModifySet","expectationCount":0}
+{"level":"info","ts":1747550521.8605347,"logger":"readiness-tracker","msg":"ExpectationsDone","gvk":"templates.gatekeeper.sh/v1beta1, Kind=ConstraintTemplate","expectationCount":2}
+{"level":"info","ts":1747550521.878051,"logger":"readiness-tracker","msg":"ExpectationsDone","gvk":"config.gatekeeper.sh/v1alpha1, Kind=Config","expectationCount":0}
+{"level":"info","ts":1747550521.8780992,"logger":"readiness-tracker","msg":"ExpectationsDone","gvk":"syncset.gatekeeper.sh/v1alpha1, Kind=SyncSet","expectationCount":0}
+{"level":"info","ts":1747550521.8814383,"logger":"readiness-tracker","msg":"ExpectationsDone","gvk":"constraints.gatekeeper.sh/v1beta1, Kind=K8sBlockLoadBalancer","expectationCount":0}
+{"level":"info","ts":1747550521.8830442,"logger":"readiness-tracker","msg":"ExpectationsDone","gvk":"constraints.gatekeeper.sh/v1beta1, Kind=K8sAllowedRepos","expectationCount":1}
+{"level":"info","ts":1747550521.9121263,"logger":"cert-rotation","msg":"no cert refresh needed"}
+{"level":"info","ts":1747550521.912277,"logger":"cert-rotation","msg":"certs are ready in /certs"}
+{"level":"info","ts":1747550521.913772,"msg":"Starting Controller","controller":"cert-rotator"}
+{"level":"info","ts":1747550521.9138453,"msg":"Starting workers","controller":"cert-rotator","worker count":1}
+{"level":"info","ts":1747550521.9154913,"logger":"cert-rotation","msg":"no cert refresh needed"}
+{"level":"info","ts":1747550521.9160998,"logger":"cert-rotation","msg":"Ensuring CA cert","name":"gatekeeper-validating-webhook-configuration","gvk":"admissionregistration.k8s.io/v1, Kind=ValidatingWebhookConfiguration","name":"gatekeeper-validating-webhook-configuration","gvk":"admissionregistration.k8s.io/v1, Kind=ValidatingWebhookConfiguration"}
+{"level":"info","ts":1747550521.926431,"logger":"cert-rotation","msg":"Ensuring CA cert","name":"gatekeeper-mutating-webhook-configuration","gvk":"admissionregistration.k8s.io/v1, Kind=MutatingWebhookConfiguration","name":"gatekeeper-mutating-webhook-configuration","gvk":"admissionregistration.k8s.io/v1, Kind=MutatingWebhookConfiguration"}
+{"level":"info","ts":1747550523.3693092,"logger":"cert-rotation","msg":"CA certs are injected to webhooks"}
+{"level":"info","ts":1747550523.3698475,"logger":"controller-runtime.certwatcher","msg":"Updated current TLS certificate"}
+{"level":"info","ts":1747550523.3698978,"logger":"setup","msg":"setting up client cert watcher"}
+{"level":"info","ts":1747550523.370023,"logger":"setup","msg":"setting up metrics"}
+{"level":"info","ts":1747550523.370043,"logger":"metrics","msg":"Starting metrics runner"}
+{"level":"info","ts":1747550523.3705792,"logger":"controller-runtime.certwatcher","msg":"Starting certificate poll+watcher","interval":10}
+{"level":"info","ts":1747550523.370674,"logger":"setup","msg":"setting up controllers"}
+{"level":"info","ts":1747550523.3708873,"msg":"Starting Controller","controller":"sync-controller"}
+{"level":"info","ts":1747550523.3709028,"msg":"Starting workers","controller":"sync-controller","worker count":1}
+{"level":"info","ts":1747550523.3709273,"msg":"Starting EventSource","controller":"sync-controller","source":"channel source: 0xc0003e89a0"}
+{"level":"info","ts":1747550523.3710635,"msg":"Starting Controller","controller":"constraint-controller"}
+{"level":"info","ts":1747550523.3710728,"msg":"Starting workers","controller":"constraint-controller","worker count":1}
+{"level":"info","ts":1747550523.3711774,"msg":"Starting EventSource","controller":"config-controller","source":"kind source: *v1beta1.ConfigPodStatus"}
+{"level":"info","ts":1747550523.3713331,"msg":"Starting EventSource","controller":"constraint-controller","source":"channel source: 0xc0006fe540"}
+{"level":"info","ts":1747550523.3713562,"msg":"Starting EventSource","controller":"constraint-controller","source":"kind source: *v1beta1.ConstraintPodStatus"}
+{"level":"info","ts":1747550523.3715281,"msg":"Starting Controller","controller":"expansion-template-controller"}
+{"level":"info","ts":1747550523.3715377,"msg":"Starting workers","controller":"expansion-template-controller","worker count":1}
+{"level":"info","ts":1747550523.371587,"msg":"Starting EventSource","controller":"config-controller","source":"kind source: *v1alpha1.Config"}
+{"level":"info","ts":1747550523.3722887,"msg":"Starting EventSource","controller":"constrainttemplate-controller","source":"kind source: *v1.CustomResourceDefinition"}
+{"level":"info","ts":1747550523.3724043,"msg":"Starting EventSource","controller":"expansion-template-controller","source":"channel source: 0xc0006fe700"}
+{"level":"info","ts":1747550523.372424,"msg":"Starting EventSource","controller":"expansion-template-controller","source":"kind source: *v1beta1.ExpansionTemplate"}
+{"level":"info","ts":1747550523.3724415,"msg":"Starting EventSource","controller":"expansion-template-controller","source":"kind source: *v1beta1.ExpansionTemplatePodStatus"}
+{"level":"info","ts":1747550523.3726,"msg":"Starting Controller","controller":"assign-controller"}
+{"level":"info","ts":1747550523.3726094,"msg":"Starting workers","controller":"assign-controller","worker count":1}
+{"level":"info","ts":1747550523.3731678,"msg":"Starting EventSource","controller":"constrainttemplate-controller","source":"kind source: *v1beta1.ConstraintTemplate"}
+{"level":"info","ts":1747550523.3733175,"msg":"Starting EventSource","controller":"constrainttemplate-controller","source":"kind source: *v1beta1.ConstraintTemplatePodStatus"}
+{"level":"info","ts":1747550523.3742561,"msg":"Starting EventSource","controller":"externaldata-controller","source":"kind source: *v1beta1.Provider"}
+{"level":"info","ts":1747550523.37447,"msg":"Starting EventSource","controller":"assign-controller","source":"kind source: *v1.Assign"}
+{"level":"info","ts":1747550523.3744972,"msg":"Starting EventSource","controller":"assign-controller","source":"kind source: *v1beta1.MutatorPodStatus"}
+{"level":"info","ts":1747550523.375615,"msg":"Starting Controller","controller":"assignimage-controller"}
+{"level":"info","ts":1747550523.3756244,"msg":"Starting workers","controller":"assignimage-controller","worker count":1}
+{"level":"info","ts":1747550523.377355,"msg":"Starting EventSource","controller":"modifyset-controller","source":"kind source: *v1beta1.MutatorPodStatus"}
+{"level":"info","ts":1747550523.3774192,"msg":"Starting EventSource","controller":"assignimage-controller","source":"kind source: *v1alpha1.AssignImage"}
+{"level":"info","ts":1747550523.3774393,"msg":"Starting EventSource","controller":"assignimage-controller","source":"kind source: *v1beta1.MutatorPodStatus"}
+{"level":"info","ts":1747550523.3775961,"msg":"Starting Controller","controller":"syncset-controller"}
+{"level":"info","ts":1747550523.377604,"msg":"Starting workers","controller":"syncset-controller","worker count":1}
+{"level":"info","ts":1747550523.378435,"msg":"Starting EventSource","controller":"modifyset-controller","source":"kind source: *v1.ModifySet"}
+{"level":"info","ts":1747550523.3789444,"msg":"Starting EventSource","controller":"assignmetadata-controller","source":"kind source: *v1beta1.MutatorPodStatus"}
+{"level":"info","ts":1747550523.3789868,"msg":"Starting EventSource","controller":"syncset-controller","source":"kind source: *v1alpha1.SyncSet"}
+{"level":"info","ts":1747550523.3790028,"logger":"setup","msg":"setting up webhooks"}
+{"level":"info","ts":1747550523.3798065,"logger":"controller-runtime.webhook","msg":"Registering webhook","path":"/v1/mutate"}
+{"level":"info","ts":1747550523.3798664,"logger":"controller-runtime.webhook","msg":"Registering webhook","path":"/v1/admitlabel"}
+{"level":"info","ts":1747550523.380352,"logger":"controller-runtime.webhook","msg":"Registering webhook","path":"/v1/admit"}
+{"level":"info","ts":1747550523.380362,"logger":"setup","msg":"setting up upgrade"}
+{"level":"info","ts":1747550523.3812313,"msg":"Starting EventSource","controller":"assignmetadata-controller","source":"kind source: *v1.AssignMetadata"}
+{"level":"info","ts":1747550523.3905244,"logger":"controller-runtime.healthz","msg":"healthz check failed","statuses":[{}]}
+{"level":"info","ts":1747550523.391045,"logger":"controller-runtime.webhook","msg":"Starting webhook server"}
+{"level":"info","ts":1747550523.3914824,"logger":"controller-runtime.certwatcher","msg":"Updated current TLS certificate"}
+{"level":"info","ts":1747550523.3915544,"logger":"controller-runtime.webhook","msg":"Serving webhook server","host":"","port":8443}
+{"level":"info","ts":1747550523.391599,"logger":"controller","msg":"Starting Upgrade Manager","metaKind":"upgrade"}
+{"level":"info","ts":1747550523.3923042,"logger":"controller-runtime.certwatcher","msg":"Starting certificate poll+watcher","interval":10}
+{"level":"info","ts":1747550523.4468985,"logger":"controller","msg":"resource","metaKind":"upgrade","kind":"K8sBlockLoadBalancer","group":"constraints.gatekeeper.sh","version":"v1alpha1"}
+{"level":"info","ts":1747550523.4594383,"logger":"controller","msg":"resource count","metaKind":"upgrade","count":0}
+{"level":"info","ts":1747550523.459471,"logger":"controller","msg":"resource","metaKind":"upgrade","kind":"K8sAllowedRepos","group":"constraints.gatekeeper.sh","version":"v1alpha1"}
+{"level":"info","ts":1747550523.485975,"logger":"controller","msg":"resource count","metaKind":"upgrade","count":1}
+{"level":"info","ts":1747550523.486017,"logger":"controller","msg":"starting update resources loop","metaKind":"upgrade","group":"constraints.gatekeeper.sh","version":"v1alpha1","kind":"K8sAllowedRepos"}
+{"level":"info","ts":1747550523.5493333,"logger":"controller","msg":"resource","metaKind":"upgrade","kind":"ConstraintTemplate","group":"templates.gatekeeper.sh","version":"v1alpha1"}
+{"level":"info","ts":1747550523.5678415,"logger":"controller","msg":"resource count","metaKind":"upgrade","count":2}
+{"level":"info","ts":1747550523.567881,"logger":"controller","msg":"starting update resources loop","metaKind":"upgrade","group":"templates.gatekeeper.sh","version":"v1alpha1","kind":"ConstraintTemplate"}
+{"level":"info","ts":1747550523.594001,"logger":"controller","msg":"resource","metaKind":"upgrade","kind":"ModifySet","group":"mutations.gatekeeper.sh","version":"v1alpha1"}
+{"level":"info","ts":1747550523.6027088,"logger":"controller","msg":"resource count","metaKind":"upgrade","count":0}
+{"level":"info","ts":1747550523.602771,"logger":"controller","msg":"resource","metaKind":"upgrade","kind":"Assign","group":"mutations.gatekeeper.sh","version":"v1alpha1"}
+{"level":"info","ts":1747550523.608792,"logger":"controller","msg":"resource count","metaKind":"upgrade","count":0}
+{"level":"info","ts":1747550523.608918,"logger":"controller","msg":"resource","metaKind":"upgrade","kind":"AssignMetadata","group":"mutations.gatekeeper.sh","version":"v1alpha1"}
+{"level":"info","ts":1747550523.6594183,"logger":"controller","msg":"resource count","metaKind":"upgrade","count":0}
+{"level":"info","ts":1747550523.659456,"logger":"controller","msg":"resource","metaKind":"upgrade","kind":"AssignImage","group":"mutations.gatekeeper.sh","version":"v1alpha1"}
+{"level":"info","ts":1747550523.671521,"logger":"controller","msg":"resource count","metaKind":"upgrade","count":0}
+{"level":"info","ts":1747550523.6974816,"logger":"controller","msg":"resource","metaKind":"upgrade","kind":"Provider","group":"externaldata.gatekeeper.sh","version":"v1alpha1"}
+{"level":"info","ts":1747550523.7035422,"logger":"KubeAPIWarningLogger","msg":"externaldata.gatekeeper.sh/v1alpha1 is deprecated. Use externaldata.gatekeeper.sh/v1beta1 instead."}
+{"level":"info","ts":1747550523.7036679,"logger":"controller","msg":"resource count","metaKind":"upgrade","count":0}
+{"level":"info","ts":1747550524.0741591,"msg":"Starting Controller","controller":"config-controller"}
+{"level":"info","ts":1747550524.0742085,"msg":"Starting workers","controller":"config-controller","worker count":1}
+{"level":"info","ts":1747550524.0742712,"msg":"Starting Controller","controller":"constrainttemplate-controller"}
+{"level":"info","ts":1747550524.0742855,"msg":"Starting workers","controller":"constrainttemplate-controller","worker count":1}
+{"level":"info","ts":1747550524.074786,"msg":"Starting Controller","controller":"externaldata-controller"}
+{"level":"info","ts":1747550524.0748172,"msg":"Starting workers","controller":"externaldata-controller","worker count":1}
+{"level":"info","ts":1747550524.080385,"msg":"Starting Controller","controller":"modifyset-controller"}
+{"level":"info","ts":1747550524.0804296,"msg":"Starting workers","controller":"modifyset-controller","worker count":1}
+{"level":"info","ts":1747550524.0804656,"msg":"Starting Controller","controller":"assignmetadata-controller"}
+{"level":"info","ts":1747550524.0804715,"msg":"Starting workers","controller":"assignmetadata-controller","worker count":1}
+{"level":"info","ts":1747550524.1187134,"logger":"watch-manager","msg":"replaying events","registrar":"constrainttemplate-controller-status","gvk":"constraints.gatekeeper.sh/v1beta1, Kind=K8sBlockLoadBalancer"}
+{"level":"info","ts":1747550524.1565034,"logger":"watch-manager","msg":"replaying events","registrar":"constrainttemplate-controller-status","gvk":"constraints.gatekeeper.sh/v1beta1, Kind=K8sAllowedRepos"}
+{"level":"info","ts":1747550524.2796557,"logger":"readiness-tracker","msg":"readiness satisfied, no further collection"}
+{"level":"info","ts":1747552560.9044158,"logger":"watch-manager","msg":"canceling replay","registrar":"constrainttemplate-controller-status","gvk":"constraints.gatekeeper.sh/v1beta1, Kind=K8sBlockLoadBalancer"}
+{"level":"info","ts":1747552560.904463,"logger":"watch-manager","msg":"all watches removed for gvk, waiting for replays to end","gvk":"constraints.gatekeeper.sh/v1beta1, Kind=K8sBlockLoadBalancer"}
+{"level":"info","ts":1747552560.904484,"logger":"watch-manager","msg":"watch removed","gvk":"constraints.gatekeeper.sh/v1beta1, Kind=K8sBlockLoadBalancer"}
+{"level":"info","ts":1747552660.8739789,"logger":"watch-manager","msg":"replaying events","registrar":"constrainttemplate-controller-status","gvk":"constraints.gatekeeper.sh/v1beta1, Kind=K8sBlockLoadBalancer"}
+{"level":"info","ts":1747552660.8756623,"msg":"sigs.k8s.io/controller-runtime/pkg/cache/internal/informers.go:108: failed to list constraints.gatekeeper.sh/v1beta1, Kind=K8sBlockLoadBalancer: the server could not find the requested resource"}
+{"level":"error","ts":1747552660.875745,"msg":"Unhandled Error","logger":"UnhandledError","error":"sigs.k8s.io/controller-runtime/pkg/cache/internal/informers.go:108: Failed to watch constraints.gatekeeper.sh/v1beta1, Kind=K8sBlockLoadBalancer: failed to list constraints.gatekeeper.sh/v1beta1, Kind=K8sBlockLoadBalancer: the server could not find the requested resource","stacktrace":"k8s.io/client-go/tools/cache.DefaultWatchErrorHandler\n\t/go/src/github.com/open-policy-agent/gatekeeper/vendor/k8s.io/client-go/tools/cache/reflector.go:166\nk8s.io/client-go/tools/cache.(*Reflector).Run.func1\n\t/go/src/github.com/open-policy-agent/gatekeeper/vendor/k8s.io/client-go/tools/cache/reflector.go:316\nk8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1\n\t/go/src/github.com/open-policy-agent/gatekeeper/vendor/k8s.io/apimachinery/pkg/util/wait/backoff.go:226\nk8s.io/apimachinery/pkg/util/wait.BackoffUntil\n\t/go/src/github.com/open-policy-agent/gatekeeper/vendor/k8s.io/apimachinery/pkg/util/wait/backoff.go:227\nk8s.io/client-go/tools/cache.(*Reflector).Run\n\t/go/src/github.com/open-policy-agent/gatekeeper/vendor/k8s.io/client-go/tools/cache/reflector.go:314\nk8s.io/client-go/tools/cache.(*controller).Run.(*Group).StartWithChannel.func2\n\t/go/src/github.com/open-policy-agent/gatekeeper/vendor/k8s.io/apimachinery/pkg/util/wait/wait.go:55\nk8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1\n\t/go/src/github.com/open-policy-agent/gatekeeper/vendor/k8s.io/apimachinery/pkg/util/wait/wait.go:72"}
+{"level":"info","ts":1747555913.9376297,"logger":"watch-manager","msg":"canceling replay","registrar":"constrainttemplate-controller-status","gvk":"constraints.gatekeeper.sh/v1beta1, Kind=K8sBlockLoadBalancer"}
+{"level":"info","ts":1747555913.9376729,"logger":"watch-manager","msg":"all watches removed for gvk, waiting for replays to end","gvk":"constraints.gatekeeper.sh/v1beta1, Kind=K8sBlockLoadBalancer"}
+{"level":"info","ts":1747555913.9376922,"logger":"watch-manager","msg":"watch removed","gvk":"constraints.gatekeeper.sh/v1beta1, Kind=K8sBlockLoadBalancer"}
+{"level":"info","ts":1747555963.611464,"logger":"watch-manager","msg":"replaying events","registrar":"constrainttemplate-controller-status","gvk":"constraints.gatekeeper.sh/v1beta1, Kind=K8sBlockLoadBalancer"}
+{"level":"info","ts":1747555963.6140034,"msg":"sigs.k8s.io/controller-runtime/pkg/cache/internal/informers.go:108: failed to list constraints.gatekeeper.sh/v1beta1, Kind=K8sBlockLoadBalancer: the server could not find the requested resource"}
+{"level":"error","ts":1747555963.6140907,"msg":"Unhandled Error","logger":"UnhandledError","error":"sigs.k8s.io/controller-runtime/pkg/cache/internal/informers.go:108: Failed to watch constraints.gatekeeper.sh/v1beta1, Kind=K8sBlockLoadBalancer: failed to list constraints.gatekeeper.sh/v1beta1, Kind=K8sBlockLoadBalancer: the server could not find the requested resource","stacktrace":"k8s.io/client-go/tools/cache.DefaultWatchErrorHandler\n\t/go/src/github.com/open-policy-agent/gatekeeper/vendor/k8s.io/client-go/tools/cache/reflector.go:166\nk8s.io/client-go/tools/cache.(*Reflector).Run.func1\n\t/go/src/github.com/open-policy-agent/gatekeeper/vendor/k8s.io/client-go/tools/cache/reflector.go:316\nk8s.io/apimachinery/pkg/util/wait.BackoffUntil.func1\n\t/go/src/github.com/open-policy-agent/gatekeeper/vendor/k8s.io/apimachinery/pkg/util/wait/backoff.go:226\nk8s.io/apimachinery/pkg/util/wait.BackoffUntil\n\t/go/src/github.com/open-policy-agent/gatekeeper/vendor/k8s.io/apimachinery/pkg/util/wait/backoff.go:227\nk8s.io/client-go/tools/cache.(*Reflector).Run\n\t/go/src/github.com/open-policy-agent/gatekeeper/vendor/k8s.io/client-go/tools/cache/reflector.go:314\nk8s.io/client-go/tools/cache.(*controller).Run.(*Group).StartWithChannel.func2\n\t/go/src/github.com/open-policy-agent/gatekeeper/vendor/k8s.io/apimachinery/pkg/util/wait/wait.go:55\nk8s.io/apimachinery/pkg/util/wait.(*Group).Start.func1\n\t/go/src/github.com/open-policy-agent/gatekeeper/vendor/k8s.io/apimachinery/pkg/util/wait/wait.go:72"}

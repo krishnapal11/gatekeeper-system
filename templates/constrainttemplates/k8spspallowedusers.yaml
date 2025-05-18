@@ -1,0 +1,103 @@
+{{- $templateName := "k8spspallowedusers" }}
+{{- $templateConfig := index .Values.constraintTemplates $templateName }}
+
+{{- if $templateConfig.enabled }}
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: {{ $templateName }}
+  labels:
+    {{- include "gatekeeper.commonLabels" . | nindent 4 }}
+  annotations:
+    metadata.gatekeeper.sh/title: "Allowed Users"
+    metadata.gatekeeper.sh/version: "1.0.2"
+    description: "Controls the user and group IDs of the container and some volumes."
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sPSPAllowedUsers
+      validation:
+        legacySchema: false
+        openAPIV3Schema:
+          type: object # Root type for the schema
+          properties:
+            exemptImages:
+              type: array
+              description: >- # Description for exemptImages
+                Any container that uses an image that matches an entry in this list will be excluded from enforcement.
+                Prefix-matching can be signified with `*`. For example: `my-image-*`.
+              items:
+                type: string
+            runAsUser:
+              type: object
+              properties:
+                rule:
+                  type: string
+                  enum: ["MustRunAs", "MustRunAsNonRoot", "RunAsAny"]
+                ranges:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      min:
+                        type: integer
+                      max:
+                        type: integer
+            runAsGroup:
+              type: object
+              properties:
+                rule:
+                  type: string
+                  enum: ["MustRunAs", "MayRunAs", "RunAsAny"]
+                ranges:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      min:
+                        type: integer
+                      max:
+                        type: integer
+            fsGroup:
+              type: object
+              properties:
+                rule:
+                  type: string
+                  enum: ["MustRunAs", "MayRunAs", "RunAsAny"]
+                ranges:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      min:
+                        type: integer
+                      max:
+                        type: integer
+            supplementalGroups:
+              type: object
+              properties:
+                rule:
+                  type: string
+                  enum: ["MustRunAs", "MayRunAs", "RunAsAny"]
+                ranges:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      min:
+                        type: integer
+                      max:
+                        type: integer
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      # IMPORTANT: The following .Files.Get paths assume your Rego files are in a 'rego' subdirectory
+      # at the root of your Helm chart (same level as Chart.yaml, templates/, values.yaml).
+      rego: |
+{{ .Files.Get "rego/k8spspallowedusers.rego" | indent 8 }}
+      libs:
+        - |
+{{ .Files.Get "rego/lib_exclude_update.rego" | indent 10 }}
+        - |
+{{ .Files.Get "rego/lib_exempt_container.rego" | indent 10 }}
+{{- end }}

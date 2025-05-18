@@ -1,0 +1,30 @@
+{{- /* k8sblockloadbalancer-constraint.yaml */}}
+{{- $templateName := "k8sblockloadbalancer" }}
+{{- $templateConfig := index .Values.constraintTemplates $templateName }}
+
+{{- /* Create this constraint if the template is enabled in values.yaml.
+     The 'message' parameter is optional (Rego has a default), so we don't need to check for $templateConfig.params specifically here for existence.
+     An empty params: {} in values.yaml is fine if no custom message is needed. */}}
+{{- if $templateConfig.enabled }}
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sBlockLoadBalancer {{/* Must match spec.crd.spec.names.kind from the ConstraintTemplate */}}
+metadata:
+  name: {{ $templateName }}-enforce {{/* Name of this specific constraint instance */}}
+  labels:
+    {{- include "gatekeeper.commonLabels" . | nindent 4 }}
+spec:
+  enforcementAction: {{ $templateConfig.enforcementAction | default "dryrun" }}
+  match:
+    {{- /* Default match targets all Services. User can override via values.yaml $templateConfig.match */}}
+    {{- $defaultMatch := dict "kinds" (list (dict "apiGroups" (list "") "versions" (list "v1") "kinds" (list "Service"))) }}
+    {{- toYaml ($templateConfig.match | default $defaultMatch) | nindent 4 }}
+  parameters:
+    {{- /* Pass params if they exist in values.yaml ($templateConfig.params).
+         If $templateConfig.params is nil or empty, pass an empty YAML map '{}'.
+         The Rego in the ConstraintTemplate handles the case where 'message' is not provided in params. */}}
+    {{- if $templateConfig.params }}
+    {{- toYaml $templateConfig.params | nindent 4 }}
+    {{- else }}
+    {}
+    {{- end }}
+{{- end }}

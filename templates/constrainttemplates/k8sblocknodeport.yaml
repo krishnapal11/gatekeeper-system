@@ -1,0 +1,48 @@
+{{- /* Name of this template, used to access its config in .Values */}}
+{{- $templateName := "k8sblocknodeport" }}
+{{- /* Get the configuration for this specific template from .Values */}}
+{{- $templateConfig := index .Values.constraintTemplates $templateName }}
+
+{{- /* Only render if enabled in .Values */}}
+{{- if $templateConfig.enabled }}
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: {{ $templateName }}
+  labels:
+    {{- include "gatekeeper.commonLabels" . | nindent 4 }}
+  annotations:
+    metadata.gatekeeper.sh/title: "Block NodePort Services"
+    metadata.gatekeeper.sh/version: "1.0.0" # Adjust version as needed
+    description: "Disallows Kubernetes Services of type NodePort. A custom message can be provided via parameters."
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sBlockNodePort {{/* This is the kind name your Constraint will use */}}
+      validation:
+        openAPIV3Schema:
+          type: object
+          properties:
+            message:
+              type: string
+              description: "An optional custom message for the violation."
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8sblocknodeport
+
+        violation[{"msg": msg}] {
+          input.review.object.kind == "Service"
+          input.review.object.spec.type == "NodePort"
+
+          # Get message from parameters; if not provided or it's an empty/whitespace string, use default.
+          param_message := object.get(input.parameters, "message", "")
+
+          m := "Services of type NodePort are not allowed." # Default message
+          not re_match(`^\s*$`, param_message) # If param_message is not empty or just whitespace
+          m := param_message
+
+          msg := m
+        }
+{{- end }}

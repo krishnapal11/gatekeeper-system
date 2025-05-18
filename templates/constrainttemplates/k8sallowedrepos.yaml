@@ -1,0 +1,61 @@
+{{- /* Name of this template, used to access its config in .Values */}}
+{{- $templateName := "k8sblockloadbalancer" }}
+{{- /* Get the configuration for this specific template from .Values */}}
+{{- $templateConfig := index .Values.constraintTemplates $templateName }}
+
+{{- /* Only render if enabled in .Values */}}
+{{- if $templateConfig.enabled }}
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: {{ $templateName }}
+  labels:
+    {{- include "gatekeeper.commonLabels" . | nindent 4 }}
+  annotations:
+    metadata.gatekeeper.sh/title: "Block LoadBalancer Services"
+    metadata.gatekeeper.sh/version: "1.0.0" # Or your preferred version for this template
+    description: "Disallows Kubernetes Services of type LoadBalancer. A custom message can be provided via parameters."
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sBlockLoadBalancer {{/* This is the kind name your Constraint will use */}}
+      validation:
+        legacySchema: false # Good practice when using openAPIV3Schema
+        openAPIV3Schema:
+          type: object
+          description: "Parameters for K8sBlockLoadBalancer. Takes an optional 'message'." # Added description for schema
+          properties:
+            message:
+              type: string
+              description: "An optional custom message for the violation."
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8sblockloadbalancer
+
+        # Function to get the message: uses parameter if provided and valid, otherwise a default.
+        get_effective_message(parameters) = msg {
+            param_msg := object.get(parameters, "message", "")
+            # Check if param_msg is not empty or just whitespace
+            not re_match(`^\s*$`, param_msg)
+            msg := param_msg                 # Use parameter message
+        }
+
+        get_effective_message(parameters) = msg {
+            param_msg := object.get(parameters, "message", "")
+            # Check if param_msg IS empty or just whitespace (or was not present)
+            re_match(`^\s*$`, param_msg)
+            msg := "Services of type LoadBalancer are not allowed by this policy." # Use default message
+        }
+
+        violation[{"msg": msg}] {
+          # Ensure we are dealing with a Service object
+          input.review.object.kind == "Service"
+          # Ensure spec exists and type is LoadBalancer
+          object.get(input.review.object.spec, "type", "") == "LoadBalancer"
+          
+          # Use the helper function to get the correct message based on parameters
+          msg := get_effective_message(object.get(input, "parameters", {}))
+        }
+{{- end }}
