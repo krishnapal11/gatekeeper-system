@@ -536,7 +536,7 @@ constraintTemplates:
     params: {} # This template takes no parameters.
 
   k8srequiredresources:
-    enabled: false # Was already true
+    enabled: true # Was already true
     enforcementAction: "dryrun"
     match:
       kinds:
