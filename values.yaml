@@ -460,7 +460,7 @@ constraintTemplates:
         - "*"
 
   k8spspreadonlyrootfilesystem:
-    enabled: false # Was already true
+    enabled: true # Was already true
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -472,7 +472,7 @@ constraintTemplates:
         - "*"
 
   k8spspselinuxv2:
-    enabled: true # Was already true
+    enabled: false # Was already true
     enforcementAction: "dryrun"
     match:
       kinds:
