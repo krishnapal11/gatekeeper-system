@@ -399,7 +399,7 @@ constraintTemplates:
         - "latest"
 
   k8spspallowedusers:
-    enabled: false # Changed from false
+    enabled: true # Changed from false
     enforcementAction: "dryrun"
     match:
       kinds:
