@@ -372,7 +372,7 @@ constraintTemplates:
       {}
 
   k8sblockwildcardingress:
-    enabled: false # Changed from false
+    enabled: true # Changed from false
     enforcementAction: "dryrun"
     match:
       kinds:
