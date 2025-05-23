@@ -348,7 +348,7 @@ constraintTemplates:
         # Add other trusted repositories here
 
   k8sblockloadbalancer:
-    enabled: false # Changed from false
+    enabled: true # Changed from false
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -360,7 +360,7 @@ constraintTemplates:
       {}
 
   k8sblocknodeport:
-    enabled: false # Changed from false
+    enabled: true # Changed from false
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -372,7 +372,7 @@ constraintTemplates:
       {}
 
   k8sblockwildcardingress:
-    enabled: false # Changed from false
+    enabled: true # Changed from false
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -384,7 +384,7 @@ constraintTemplates:
       {}
 
   k8sdisallowedtags:
-    enabled: false # Changed from false
+    enabled: true # Changed from false
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -399,7 +399,7 @@ constraintTemplates:
         - "latest"
 
   k8spspallowedusers:
-    enabled: false # Changed from false
+    enabled: true # Changed from false
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -419,7 +419,7 @@ constraintTemplates:
       # Ensure you configure these fields as per your security requirements.
 
   k8srequiredlabels:
-    enabled: false # Changed from false
+    enabled: true # Changed from false
     enforcementAction: "dryrun"
     match: # REVIEW AND CUSTOMIZE: Target resources that should have these labels.
       kinds:
@@ -439,7 +439,7 @@ constraintTemplates:
         #   allowedRegex: "^(dev|staging|prod)$"
 
   k8spsphostnamespace:
-    enabled: false # Changed from false
+    enabled: true # Changed from false
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -448,7 +448,7 @@ constraintTemplates:
     params: {} # This template takes no parameters.
 
   k8spspprivilegedcontainer:
-    enabled: false # Changed from false
+    enabled: true # Changed from false
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -460,7 +460,7 @@ constraintTemplates:
         - "*"
 
   k8spspreadonlyrootfilesystem:
-    enabled: false # Was already true
+    enabled: true # Was already true
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -472,7 +472,7 @@ constraintTemplates:
         - "*"
 
   k8spspselinuxv2:
-    enabled: false # Was already true
+    enabled: true # Was already true
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -488,7 +488,7 @@ constraintTemplates:
       exemptImages: []
 
   k8spspvolumetypes:
-    enabled: false # Was already true
+    enabled: true # Was already true
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -506,7 +506,7 @@ constraintTemplates:
         # - "*" # Or use this to allow all volume types for initial testing
 
   k8srequiredannotations:
-    enabled: false # Was already true
+    enabled: true # Was already true
     enforcementAction: "dryrun"
     match: # REVIEW AND CUSTOMIZE: Target resources that should have these annotations.
       kinds:
@@ -526,7 +526,7 @@ constraintTemplates:
         #   allowedRegex: ".+@example\\.com"
 
   k8suniqueserviceselector:
-    enabled: false # Was already true
+    enabled: true # Was already true
     enforcementAction: "dryrun"
     match: # This policy specifically targets Service resources.
       kinds:
