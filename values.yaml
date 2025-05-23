@@ -348,7 +348,7 @@ constraintTemplates:
         # Add other trusted repositories here
 
   k8sblockloadbalancer:
-    enabled: true # Changed from false
+    enabled: false # Changed from false
     enforcementAction: "dryrun"
     match:
       kinds:
