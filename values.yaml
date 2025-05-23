@@ -472,7 +472,7 @@ constraintTemplates:
         - "*"
 
   k8spspselinuxv2:
-    enabled: false # Was already true
+    enabled: true # Was already true
     enforcementAction: "dryrun"
     match:
       kinds:
