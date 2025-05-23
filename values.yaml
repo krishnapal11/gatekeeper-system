@@ -439,7 +439,7 @@ constraintTemplates:
         #   allowedRegex: "^(dev|staging|prod)$"
 
   k8spsphostnamespace:
-    enabled: false # Changed from false
+    enabled: true # Changed from false
     enforcementAction: "dryrun"
     match:
       kinds:
