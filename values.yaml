@@ -419,7 +419,7 @@ constraintTemplates:
       # Ensure you configure these fields as per your security requirements.
 
   k8srequiredlabels:
-    enabled: true # Changed from false
+    enabled: false # Changed from false
     enforcementAction: "dryrun"
     match: # REVIEW AND CUSTOMIZE: Target resources that should have these labels.
       kinds:
@@ -439,7 +439,7 @@ constraintTemplates:
         #   allowedRegex: "^(dev|staging|prod)$"
 
   k8spsphostnamespace:
-    enabled: true # Changed from false
+    enabled: false # Changed from false
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -448,7 +448,7 @@ constraintTemplates:
     params: {} # This template takes no parameters.
 
   k8spspprivilegedcontainer:
-    enabled: true # Changed from false
+    enabled: false # Changed from false
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -460,7 +460,7 @@ constraintTemplates:
         - "*"
 
   k8spspreadonlyrootfilesystem:
-    enabled: true # Was already true
+    enabled: false # Was already true
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -472,7 +472,7 @@ constraintTemplates:
         - "*"
 
   k8spspselinuxv2:
-    enabled: true # Was already true
+    enabled: false # Was already true
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -488,7 +488,7 @@ constraintTemplates:
       exemptImages: []
 
   k8spspvolumetypes:
-    enabled: true # Was already true
+    enabled: false # Was already true
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -506,7 +506,7 @@ constraintTemplates:
         # - "*" # Or use this to allow all volume types for initial testing
 
   k8srequiredannotations:
-    enabled: true # Was already true
+    enabled: false # Was already true
     enforcementAction: "dryrun"
     match: # REVIEW AND CUSTOMIZE: Target resources that should have these annotations.
       kinds:
