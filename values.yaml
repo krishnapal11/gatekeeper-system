@@ -360,7 +360,7 @@ constraintTemplates:
       {}
 
   k8sblocknodeport:
-    enabled: false # Changed from false
+    enabled: true # Changed from false
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -372,7 +372,7 @@ constraintTemplates:
       {}
 
   k8sblockwildcardingress:
-    enabled: true # Changed from false
+    enabled: false # Changed from false
     enforcementAction: "dryrun"
     match:
       kinds:
