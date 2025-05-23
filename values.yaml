@@ -488,7 +488,7 @@ constraintTemplates:
       exemptImages: []
 
   k8spspvolumetypes:
-    enabled: false # Was already true
+    enabled: true # Was already true
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -506,7 +506,7 @@ constraintTemplates:
         # - "*" # Or use this to allow all volume types for initial testing
 
   k8srequiredannotations:
-    enabled: false # Was already true
+    enabled: true # Was already true
     enforcementAction: "dryrun"
     match: # REVIEW AND CUSTOMIZE: Target resources that should have these annotations.
       kinds:
