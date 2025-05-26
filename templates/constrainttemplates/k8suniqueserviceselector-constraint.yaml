@@ -3,7 +3,7 @@
 
 {{- if $templateConfig.enabled }}
 apiVersion: constraints.gatekeeper.sh/v1beta1
-kind: K8sUniqueServiceSelector {{/* Must match spec.crd.spec.names.kind from the ConstraintTemplate */}}
+kind: k8suniqueserviceselector {{/* Must match spec.crd.spec.names.kind from the ConstraintTemplate */}}
 metadata:
   name: {{ $templateName }}-enforce {{/* Name of this specific constraint instance */}}
   labels:
