@@ -29,58 +29,101 @@ spec:
   crd:
     spec:
       names:
-        kind: K8sUniqueServiceSelector # Conventionally, it's PascalCase for Kind
+        kind: K8sUniqueServiceSelector
       validation:
         legacySchema: false
         openAPIV3Schema:
           type: object
+          # This template takes no parameters, but the schema type must be object.
+          # The 'properties' field is omitted as there are no configurable parameters.
           description: "Ensures that selectors for Services are unique within a namespace. This constraint takes no parameters."
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
         package k8suniqueserviceselector
 
-        # Helper to create a canonical, sorted, comma-separated string from a selector map
-        # Returns empty string if no selector or selector is empty.
+        # get_message: Helper to retrieve a custom message from parameters or return a default.
+        # This function is not used in this specific template as it currently has no parameters,
+        # but it's good practice for consistency with other templates.
+        get_message(parameters, _default) = msg {
+          p_msg := object.get(parameters, "message", "")
+          not p_msg == ""
+          msg := p_msg
+        } else = msg {
+          msg := _default
+        }
+
+        # make_apiversion: Helper to construct the full apiVersion string from a kind object.
+        make_apiversion(kind_obj) = api_version {
+          group := object.get(kind_obj, "group", "")
+          version := object.get(kind_obj, "version", "")
+          group != "" # Non-core API group
+          api_version = sprintf("%v/%v", [group, version])
+        } else = api_version {
+          # Core API group (e.g., "v1" for Service)
+          api_version := object.get(kind_obj, "version", "")
+        }
+
+        # is_same_resource: Helper to check if an object from inventory is the same as the one being reviewed.
+        # This prevents self-comparison during updates.
+        is_same_resource(obj_from_inventory, review_info) {
+          obj_from_inventory.metadata.namespace == review_info.namespace
+          obj_from_inventory.metadata.name == review_info.name
+          obj_from_inventory.kind == review_info.kind.kind
+          obj_from_inventory.apiVersion == make_apiversion(review_info.kind)
+        }
+
+        # flatten_selector: Creates a canonical, sorted, comma-separated string from a service's selector map.
+        # Returns an empty string if the service has no selector or an empty selector,
+        # which is important for distinguishing services that don't select pods.
         flatten_selector(service_obj) = flattened_str {
           selector_map := object.get(object.get(service_obj, "spec", {}), "selector", {})
           count(object.keys(selector_map)) > 0 # Ensure selector is not empty
 
-          # Create "key:value" strings
-          selector_pairs := [sprintf("%v:%v", [key, value]) | key := object.keys(selector_map)[_]; value := selector_map[key]]
-          
-          # Sort and join for a canonical representation
+          # Create "key:value" strings for each label in the selector
+          selector_pairs := [sprintf("%v:%v", [key, value]) |
+                            key := object.keys(selector_map)[_];
+                            value := selector_map[key]]
+
+          # Sort the pairs and join them into a single string for canonical representation
           flattened_str := concat(",", sort(selector_pairs))
         } else = "" {
-          # If selector is missing or empty, return an empty string
-          true
+          true # Return empty string if no selector or empty selector
         }
 
-        violation[{"msg": msg, "details": {"conflicting_service_name": other_service_name, "namespace": review_namespace, "conflicting_selector": input_selector_str}}] {
-          # This policy applies to v1/Service kinds
+        # Violation rule: Triggers if a Service has a selector that duplicates another Service's selector.
+        violation[{"msg": msg, "details": {"conflicting_service_name": other_service_name, "namespace": current_namespace, "conflicting_selector": current_service_selector_str}}] {
+          # Only apply to core v1 Services.
           input.review.kind.kind == "Service"
           input.review.kind.version == "v1"
-          input.review.kind.group == "" # Core API group
+          input.review.kind.group == ""
 
-          review_namespace := input.review.namespace
-          current_service_name := input.review.object.metadata.name
-          
-          input_selector_str := flatten_selector(input.review.object)
-          input_selector_str != "" # Only check for conflicts if the incoming service actually has a selector
+          current_service := input.review.object
+          current_namespace := input.review.namespace
+          current_service_name := current_service.metadata.name
 
-          # Iterate over existing services in the same namespace from Gatekeeper's cache
-          # data.inventory.namespace[<namespace>].service is a map where keys are service names
-          other_service_name := object.keys(data.inventory.namespace[review_namespace].service)[_]
-          other_service := data.inventory.namespace[review_namespace].service[other_service_name]
+          # Get the flattened selector for the service being reviewed.
+          # A service without a selector cannot cause a conflict with another selector.
+          current_service_selector_str := flatten_selector(current_service)
+          current_service_selector_str != ""
 
-          # Don't compare the service with itself (e.g., during an update operation on the same service)
-          current_service_name != other_service_name
+          # Look for other services in the same namespace from Gatekeeper's cached inventory.
+          # data.inventory.namespace[<namespace>].service is a map where keys are service names.
+          other_service_name := object.keys(data.inventory.namespace[current_namespace].service)[_]
+          other_service := data.inventory.namespace[current_namespace].service[other_service_name]
 
-          other_selector_str := flatten_selector(other_service)
-          other_selector_str != "" # Only compare if the other service also has a selector
-          
-          input_selector_str == other_selector_str # Conflict if selectors are identical
-          
-          msg := sprintf("Service '%v' in namespace '%v' has a selector '%v' that conflicts with existing service '%v'. Selectors must be unique within a namespace.", [current_service_name, review_namespace, input_selector_str, other_service_name])
+          # Ensure we're not comparing the service against itself (e.g., during an update).
+          not is_same_resource(other_service, input.review)
+
+          # Get the flattened selector for the other service.
+          # Only compare if the other service also has a selector.
+          other_service_selector_str := flatten_selector(other_service)
+          other_service_selector_str != ""
+
+          # If the flattened selector strings are identical, we have a conflict.
+          current_service_selector_str == other_service_selector_str
+
+          # Construct the violation message.
+          msg := sprintf("Service '%v' in namespace '%v' has a selector '%v' that conflicts with existing service '%v'. Selectors must be unique within a namespace.", [current_service_name, current_namespace, current_service_selector_str, other_service_name])
         }
 {{- end }}
