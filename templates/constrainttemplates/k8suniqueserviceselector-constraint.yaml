@@ -10,16 +10,19 @@ metadata:
     {{- include "gatekeeper.commonLabels" . | nindent 4 }}
 spec:
   # Enforcement action for this constraint instance (e.g., "deny", "dryrun", "warn").
-  # Defaults to "dryrun" if not specified in .Values.constraintTemplates.k8suniqueserviceselector.enforcementAction
+  # Defaults to "dryrun" if not specified in .Values.constraintTemplates.k8suniqueserviceseselector.enforcementAction
   enforcementAction: {{ $templateConfig.enforcementAction | default "dryrun" }}
   
   # Specifies which resources this constraint applies to.
-  # The default targets Services across all API Groups and versions if not overridden in values.
+  # This policy specifically targets Service resources.
+  # The default configuration targets Services across all API Groups and versions
+  # if not overridden in your values.yaml under .Values.constraintTemplates.k8suniqueserviceselector.match.
   match:
     {{- $defaultMatch := dict "kinds" (list (dict "apiGroups" (list "") "versions" (list "v1") "kinds" (list "Service"))) }}
     {{- toYaml ($templateConfig.match | default $defaultMatch) | nindent 4 }}
   
-  # This ConstraintTemplate defines no configurable parameters in its CRD spec.
-  # However, Gatekeeper's schema requires the 'parameters' field to be present if the schema type is 'object'.
-  parameters: {}
+  # This ConstraintTemplate defines no configurable parameters in its CRD spec validation.
+  # However, Gatekeeper's schema for Constraint resources typically requires the 'parameters' field
+  # to be present if the template's 'openAPIV3Schema' is of 'type: object'.
+  parameters: {} # An empty object satisfies this requirement.
 {{- end }}
