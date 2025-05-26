@@ -3,18 +3,23 @@
 
 {{- if $templateConfig.enabled }}
 apiVersion: constraints.gatekeeper.sh/v1beta1
-kind: k8suniqueserviceselector {{/* Must match spec.crd.spec.names.kind from the ConstraintTemplate */}}
+kind: K8sUniqueServiceSelector {{/* Must match spec.crd.spec.names.kind from the ConstraintTemplate */}}
 metadata:
   name: {{ $templateName }}-enforce {{/* Name of this specific constraint instance */}}
   labels:
     {{- include "gatekeeper.commonLabels" . | nindent 4 }}
 spec:
-  enforcementAction: {{ $templateConfig.enforcementAction | default "dryrun" }} # Default to dryrun
+  # Enforcement action for this constraint instance (e.g., "deny", "dryrun", "warn").
+  # Defaults to "dryrun" if not specified in .Values.constraintTemplates.k8suniqueserviceselector.enforcementAction
+  enforcementAction: {{ $templateConfig.enforcementAction | default "dryrun" }}
+  
+  # Specifies which resources this constraint applies to.
+  # The default targets Services across all API Groups and versions if not overridden in values.
   match:
-    {{- /* This policy specifically targets Service resources. */}}
     {{- $defaultMatch := dict "kinds" (list (dict "apiGroups" (list "") "versions" (list "v1") "kinds" (list "Service"))) }}
     {{- toYaml ($templateConfig.match | default $defaultMatch) | nindent 4 }}
-  # This ConstraintTemplate defines no configurable parameters.
-  # Gatekeeper requires the 'parameters' field if the schema type is 'object'.
+  
+  # This ConstraintTemplate defines no configurable parameters in its CRD spec.
+  # However, Gatekeeper's schema requires the 'parameters' field to be present if the schema type is 'object'.
   parameters: {}
 {{- end }}
