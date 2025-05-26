@@ -85,10 +85,11 @@ spec:
                             key := object.keys(selector_map)[_];
                             value := selector_map[key]]
 
-          # Sort the pairs and join them into a single string for canonical representation
-          flattened_str := concat(",", sort(selector_pairs))
+           # Sort the pairs and join them into a single string for canonical representation
+           flattened_str := concat(",", sort(selector_pairs))
         } else = "" {
-          true # Return empty string if no selector or empty selector
+          true # This simply means "if the first rule didn't match, then this 'else' rule matches".
+               # It implicitly covers cases where selector_map is empty or not present.
         }
 
         # Violation rule: Triggers if a Service has a selector that duplicates another Service's selector.
