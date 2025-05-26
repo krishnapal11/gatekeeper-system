@@ -526,7 +526,7 @@ constraintTemplates:
         #   allowedRegex: ".+@example\\.com"
 
   k8suniqueserviceselector:
-    enabled: false # Was already true
+    enabled: true # Was already true
     enforcementAction: "dryrun"
     match: # This policy specifically targets Service resources.
       kinds:
