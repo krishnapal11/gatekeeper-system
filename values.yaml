@@ -334,7 +334,7 @@ serviceAccount:
 # ---------------------------------------------------------------------
 constraintTemplates:
   k8sallowedrepos:
-    enabled: false
+    enabled: true
     enforcementAction: "dryrun"
     match:
       kinds:
