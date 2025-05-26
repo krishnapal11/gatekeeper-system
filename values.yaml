@@ -334,7 +334,7 @@ serviceAccount:
 # ---------------------------------------------------------------------
 constraintTemplates:
   k8sallowedrepos:
-    enabled: true
+    enabled: false
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -384,7 +384,7 @@ constraintTemplates:
       {}
 
   k8sdisallowedtags:
-    enabled: true # Changed from false
+    enabled: false # Changed from false
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -399,7 +399,7 @@ constraintTemplates:
         - "latest"
 
   k8spspallowedusers:
-    enabled: true # Changed from false
+    enabled: false # Changed from false
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -439,7 +439,7 @@ constraintTemplates:
         #   allowedRegex: "^(dev|staging|prod)$"
 
   k8spsphostnamespace:
-    enabled: true # Changed from false
+    enabled: false # Changed from false
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -448,7 +448,7 @@ constraintTemplates:
     params: {} # This template takes no parameters.
 
   k8spspprivilegedcontainer:
-    enabled: true # Changed from false
+    enabled: false # Changed from false
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -460,7 +460,7 @@ constraintTemplates:
         - "*"
 
   k8spspreadonlyrootfilesystem:
-    enabled: true # Was already true
+    enabled: false # Was already true
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -488,7 +488,7 @@ constraintTemplates:
       exemptImages: []
 
   k8spspvolumetypes:
-    enabled: true # Was already true
+    enabled: false # Was already true
     enforcementAction: "dryrun"
     match:
       kinds:
@@ -506,7 +506,7 @@ constraintTemplates:
         # - "*" # Or use this to allow all volume types for initial testing
 
   k8srequiredannotations:
-    enabled: true # Was already true
+    enabled: false # Was already true
     enforcementAction: "dryrun"
     match: # REVIEW AND CUSTOMIZE: Target resources that should have these annotations.
       kinds:
@@ -536,7 +536,7 @@ constraintTemplates:
     params: {} # This template takes no parameters.
 
   k8srequiredresources:
-    enabled: true # Was already true
+    enabled: false # Was already true
     enforcementAction: "dryrun"
     match:
       kinds:
