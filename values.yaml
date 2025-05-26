@@ -527,7 +527,7 @@ constraintTemplates:
 
     
   k8srequiredresources:
-    enabled: true # Was already true
+    enabled: false # Was already true
     enforcementAction: "dryrun"
     match:
       kinds:
