@@ -11,7 +11,7 @@ metadata:
   labels:
     {{- include "gatekeeper.commonLabels" . | nindent 4 }}
   annotations:
-    argocd.argoproj.io/sync-wave: "1" # <-- CORRECTED: Added sync-wave for constraints
+
 spec:
   enforcementAction: {{ $templateConfig.enforcementAction | default "dryrun" }} # Default to dryrun
   match:
