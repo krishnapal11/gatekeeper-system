@@ -12,6 +12,7 @@ metadata:
   labels:
     {{- include "gatekeeper.commonLabels" . | nindent 4 }}
   annotations:
+    argocd.argoproj.io/sync-wave: "-1
     metadata.gatekeeper.sh/title: "Block LoadBalancer Services"
     metadata.gatekeeper.sh/version: "1.0.0" # Or your preferred version for this template
     description: "Disallows Kubernetes Services of type LoadBalancer. A custom message can be provided via parameters."
