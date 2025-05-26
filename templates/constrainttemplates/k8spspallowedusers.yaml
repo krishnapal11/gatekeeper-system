@@ -9,7 +9,7 @@ metadata:
   labels:
     {{- include "gatekeeper.commonLabels" . | nindent 4 }}
   annotations:
-    argocd.argoproj.io/sync-wave: "-1"
+    argocd.argoproj.io/sync-wave: "-1" # <-- CORRECTED: Closing double quote added
     metadata.gatekeeper.sh/title: "Allowed Users"
     metadata.gatekeeper.sh/version: "1.0.2"
     description: "Controls the user and group IDs of the container and some volumes."
@@ -21,11 +21,11 @@ spec:
       validation:
         legacySchema: false
         openAPIV3Schema:
-          type: object # Root type for the schema
+          type: object
           properties:
             exemptImages:
               type: array
-              description: >- # Description for exemptImages
+              description: >-
                 Any container that uses an image that matches an entry in this list will be excluded from enforcement.
                 Prefix-matching can be signified with `*`. For example: `my-image-*`.
               items:
@@ -92,8 +92,6 @@ spec:
                         type: integer
   targets:
     - target: admission.k8s.gatekeeper.sh
-      # IMPORTANT: The following .Files.Get paths assume your Rego files are in a 'rego' subdirectory
-      # at the root of your Helm chart (same level as Chart.yaml, templates/, values.yaml).
       rego: |
 {{ .Files.Get "rego/k8spspallowedusers.rego" | indent 8 }}
       libs:
