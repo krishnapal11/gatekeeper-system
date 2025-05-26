@@ -525,15 +525,7 @@ constraintTemplates:
         # - key: "example.com/owner"
         #   allowedRegex: ".+@example\\.com"
 
-  k8suniqueserviceselector:
-    enabled: false # Was already true
-    enforcementAction: "dryrun"
-    match: # This policy specifically targets Service resources.
-      kinds:
-        - apiGroups: [""]
-          versions: ["v1"]
-          kinds: ["Service"]
-    params: {} # This template takes no parameters.
+
 
   k8srequiredresources:
     enabled: true # Was already true
