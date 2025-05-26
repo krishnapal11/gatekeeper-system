@@ -419,7 +419,7 @@ constraintTemplates:
       # Ensure you configure these fields as per your security requirements.
 
   k8srequiredlabels:
-    enabled: true # Changed from false
+    enabled: false # Changed from false
     enforcementAction: "dryrun"
     match: # REVIEW AND CUSTOMIZE: Target resources that should have these labels.
       kinds:
