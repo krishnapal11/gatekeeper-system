@@ -1,28 +1,21 @@
-{{- $templateName := "k8suniqueserviceselector" }}
-{{- $templateConfig := index .Values.constraintTemplates $templateName }}
-
-{{- if $templateConfig.enabled }}
+# filename: enforce-unique-service-selector.yaml
 apiVersion: constraints.gatekeeper.sh/v1beta1
-kind: K8sUniqueServiceSelector {{/* Must match spec.crd.spec.names.kind from the ConstraintTemplate */}}
+kind: K8sUniqueServiceSelector # Must exactly match the 'kind' in the ConstraintTemplate
 metadata:
-  name: {{ $templateName }}-enforce {{/* Name of this specific constraint instance */}}
-  labels:
-    {{- include "gatekeeper.commonLabels" . | nindent 4 }}
+  name: enforce-unique-service-selectors # A unique name for this constraint instance
 spec:
-  # Enforcement action for this constraint instance (e.g., "deny", "dryrun", "warn").
-  # Defaults to "dryrun" if not specified in .Values.constraintTemplates.k8suniqueserviceseselector.enforcementAction
-  enforcementAction: {{ $templateConfig.enforcementAction | default "dryrun" }}
-  
-  # Specifies which resources this constraint applies to.
-  # This policy specifically targets Service resources.
-  # The default configuration targets Services across all API Groups and versions
-  # if not overridden in your values.yaml under .Values.constraintTemplates.k8suniqueserviceselector.match.
+  # Enforcement action:
+  # "deny" (default): Blocks resource creation/update if violated.
+  # "dryrun": Reports violations without blocking.
+  # "warn": Reports violations as a warning.
+  enforcementAction: dryrun 
   match:
-    {{- $defaultMatch := dict "kinds" (list (dict "apiGroups" (list "") "versions" (list "v1") "kinds" (list "Service"))) }}
-    {{- toYaml ($templateConfig.match | default $defaultMatch) | nindent 4 }}
-  
-  # This ConstraintTemplate defines no configurable parameters in its CRD spec validation.
-  # However, Gatekeeper's schema for Constraint resources typically requires the 'parameters' field
-  # to be present if the template's 'openAPIV3Schema' is of 'type: object'.
-  parameters: {} # An empty object satisfies this requirement.
-{{- end }}
+    kinds:
+      - apiGroups: [""] # Target core Kubernetes API group
+        kinds: ["Service"] # Target Service resources
+    # To restrict to specific namespaces, uncomment and list them:
+    # namespaces:
+    #   - default
+    #   - my-app-namespace
+  # No parameters are defined for this ConstraintTemplate, so parameters block is empty.
+  parameters: {}
