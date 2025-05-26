@@ -10,8 +10,8 @@ metadata:
     {{- include "gatekeeper.commonLabels" . | nindent 4 }}
   annotations:
     metadata.gatekeeper.sh/title: "Unique Service Selector"
-    metadata.gatekeeper.sh/version: "1.0.2" # Version from your input
-    metadata.gatekeeper.sh/requires-sync-data: | # Crucial: Tells Gatekeeper to sync Service data
+    metadata.gatekeeper.sh/version: "1.0.2"
+    metadata.gatekeeper.sh/requires-sync-data: |
       "[
         [
           {
@@ -29,58 +29,39 @@ spec:
   crd:
     spec:
       names:
-        kind: k8suniqueserviceselector # Static Kind
+        kind: K8sUniqueServiceSelector # Conventionally, it's PascalCase for Kind
       validation:
         legacySchema: false
         openAPIV3Schema:
-          type: object # This template takes no parameters, but schema is still type object.
+          type: object
           description: "Ensures that selectors for Services are unique within a namespace. This constraint takes no parameters."
-          # No 'properties' field is needed as there are no configurable parameters.
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
         package k8suniqueserviceselector
 
-        # Helper to construct full apiVersion string from a kind object
-        make_apiversion(kind_obj) = api_version {
-          g := object.get(kind_obj, "group", "")
-          v := object.get(kind_obj, "version", "")
-          g != "" # If group is not empty
-          api_version = sprintf("%v/%v", [g, v])
-        } else = api_version { # If group is empty (core API group)
-          api_version := object.get(kind_obj, "version", "")
-        }
-
-        # Helper to check if an object from inventory is the same as the one being reviewed
-        is_same_resource(obj_from_inventory, review_info) {
-          obj_from_inventory.metadata.namespace == review_info.namespace
-          obj_from_inventory.metadata.name == review_info.name
-          obj_from_inventory.kind == review_info.kind.kind
-          obj_from_inventory.apiVersion == make_apiversion(review_info.kind)
-        }
-
-        # Creates a canonical, sorted, comma-separated string from a selector map
+        # Helper to create a canonical, sorted, comma-separated string from a selector map
         # Returns empty string if no selector or selector is empty.
         flatten_selector(service_obj) = flattened_str {
-          selector_map := object.get(object.get(service_obj, "spec", {}), "selector", null)
-          selector_map != null # Ensure selector exists and is not null
+          selector_map := object.get(object.get(service_obj, "spec", {}), "selector", {})
           count(object.keys(selector_map)) > 0 # Ensure selector is not empty
-          
+
           # Create "key:value" strings
-          selector_pairs := [pair | pair = concat(":", [key, value]); value = selector_map[key]]
+          selector_pairs := [sprintf("%v:%v", [key, value]) | key := object.keys(selector_map)[_]; value := selector_map[key]]
           
           # Sort and join for a canonical representation
           flattened_str := concat(",", sort(selector_pairs))
-        } else = "" { # Default for no selector or empty selector
-          selector_map := object.get(object.get(service_obj, "spec", {}), "selector", null)
-          selector_map == null or count(object.keys(selector_map)) == 0
+        } else = "" {
+          # If selector is missing or empty, return an empty string
+          true
         }
 
-        violation[{"msg": msg, "details": {"conflicting_service_name": other_service_name, "namespace": review_namespace}}] {
+        violation[{"msg": msg, "details": {"conflicting_service_name": other_service_name, "namespace": review_namespace, "conflicting_selector": input_selector_str}}] {
           # This policy applies to v1/Service kinds
           input.review.kind.kind == "Service"
-          # The match criteria in the Constraint should ideally handle GVK checks.
-          
+          input.review.kind.version == "v1"
+          input.review.kind.group == "" # Core API group
+
           review_namespace := input.review.namespace
           current_service_name := input.review.object.metadata.name
           
@@ -88,18 +69,18 @@ spec:
           input_selector_str != "" # Only check for conflicts if the incoming service actually has a selector
 
           # Iterate over existing services in the same namespace from Gatekeeper's cache
-          # The path data.inventory.namespace[review_namespace][_]["Service"][other_service_name]
-          # is based on your original template. Ensure your sync config populates this path.
-          other_service := data.inventory.namespace[review_namespace][_]["Service"][other_service_name]
+          # data.inventory.namespace[<namespace>].service is a map where keys are service names
+          other_service_name := object.keys(data.inventory.namespace[review_namespace].service)[_]
+          other_service := data.inventory.namespace[review_namespace].service[other_service_name]
 
           # Don't compare the service with itself (e.g., during an update operation on the same service)
-          not is_same_resource(other_service, input.review)
+          current_service_name != other_service_name
 
           other_selector_str := flatten_selector(other_service)
           other_selector_str != "" # Only compare if the other service also has a selector
           
           input_selector_str == other_selector_str # Conflict if selectors are identical
           
-          msg := sprintf("Service '%v' in namespace '%v' has a selector that conflicts with existing service '%v'. Selectors must be unique.", [current_service_name, review_namespace, other_service_name])
+          msg := sprintf("Service '%v' in namespace '%v' has a selector '%v' that conflicts with existing service '%v'. Selectors must be unique within a namespace.", [current_service_name, review_namespace, input_selector_str, other_service_name])
         }
 {{- end }}
