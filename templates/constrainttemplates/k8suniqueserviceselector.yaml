@@ -29,7 +29,7 @@ spec:
   crd:
     spec:
       names:
-        kind: K8sUniqueServiceSelector # Static Kind
+        kind: k8suniqueserviceselector # Static Kind
       validation:
         legacySchema: false
         openAPIV3Schema:
